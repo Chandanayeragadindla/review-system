@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fffbea;
+      color: #333;
+      padding: 20px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { font-size: 2.5rem; color: #f9a825; }
+    .header p { font-size: 1rem; color: #555; }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background-color: #fff;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .product-card:hover { transform: scale(1.02); }
+    .product-image img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      background-color: #f9f9f9;
+      padding: 10px;
+    }
+    .product-category { font-size: 0.8rem; color: #888; padding: 10px; }
+    .product-title { font-size: 1.2rem; font-weight: bold; padding: 0 10px; color: #222; }
+    .rating-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 0.9rem;
+      color: #fbc02d;
+    }
+    .price { font-size: 1.3rem; font-weight: bold; color: #43a047; padding: 10px; }
+    .reviews-section {
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+    .review {
+      border-left: 3px solid #fbc02d;
+      padding-left: 10px;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+    .submit-review {
+      padding: 10px;
+      border-top: 1px solid #eee;
+    }
+    .submit-review input {
+      margin: 5px 0;
+      width: 100%;
+      padding: 5px;
+    }
+    .submit-review button {
+      padding: 8px;
+      background-color: #f9a825;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .submit-review button:hover {
+      background-color: #f57f17;
+    }
+    .star-rating span {
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #fbc02d;
+      user-select: none;
+    }
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.5rem; }
+      .product-title { font-size: 1rem; }
+      .price { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+     
+      <h1>Review Our Products</h1>
+      <p>Discover the best deals on top-rated items</p>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+
+  <script>
+    const products = [
+      {
+        title: 'Classic Black Shoulder Bag',
+        category: 'Fashion Accessories',
+        rating: '★★★★☆',
+        price: 899,
+        image: 'frontend/bag.jpg'
+      },
+      {
+        title: 'iPhone 15 - Blue',
+        category: 'Electronics',
+        rating: '★★★★☆',
+        price: 79999,
+        image: 'frontend/iphone.jpg'
+      },
+      {
+        title: 'SPF 30+ Sunscreen Lotion',
+        category: 'Health & Beauty',
+        rating: '★★★★☆',
+        price: 549,
+        image: 'frontend/sunscreen.jpg'
+      },
+      {
+        title: 'Premium Matte Lipstick - Red',
+        category: 'Beauty & Cosmetics',
+        rating: '★★★★★',
+        price: 349,
+        image: 'frontend/lipstick.jpg'
+      },
+       {
+        title: 'Max-Fashion Brown Top',
+        category: 'Clothing',
+        rating: '★★★★★',
+        price: 699,
+        image: 'frontend/dress.jpg'
+      },
+        {
+        title: 'Luggage Trolley Bag - 20 inch',
+        category: 'Travel Accessories',
+        rating: '★★★★★',
+        price: 2499,
+        image: 'frontend/trolley.jpg'
+      },
+      {
+        title: 'Sneakers - White',
+        category: 'Footwear',
+        rating: '★★★★★',
+        price: 599,
+        image: 'frontend/sneakers.jpg'
+      },
+      {
+        title: 'Mini Fan - Portable USB',
+        category: 'Electronics',
+        rating: '★★★★★',
+        price: 499,
+        image: 'frontend/fan.jpg'
+      }
+
+
+    ];
+
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      products.forEach((product, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        card.innerHTML = `
+          <div class="product-image">
+            <img src="${product.image}" alt="${product.title}" />
+          </div>
+          <div class="product-category">${product.category}</div>
+          <div class="product-title">${product.title}</div>
+          <div class="rating-section">
+            <div>${product.rating}</div>
+            <div>${(Math.random() * 5).toFixed(1)}/5</div>
+          </div>
+          <div class="price">₹${product.price}</div>
+          <div class="reviews-section" id="reviews-${index}">
+            Loading reviews...
+          </div>
+          <div class="submit-review">
+            <label>Your Name:</label>
+            <input type="text" id="username-${index}" placeholder="Enter your name" />
+            <label>Rating:</label>
+            <div class="star-rating" id="stars-${index}">
+              ${[1,2,3,4,5].map(i => `<span onclick="setRating(${index}, ${i})" id="star-${index}-${i}">☆</span>`).join('')}
+            </div>
+            <input type="hidden" id="rating-${index}" />
+            <label>Review:</label>
+            <input type="text" id="review-${index}" placeholder="Write your review..." />
+            <button onclick="submitReview(${index})">Submit Review</button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+        loadReviews(product.title, index);
+      });
+    }
+
+    function setRating(index, rating) {
+      document.getElementById(`rating-${index}`).value = rating;
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById(`star-${index}-${i}`).textContent = i <= rating ? '⭐' : '☆';
+      }
+    }
+
+    function submitReview(index) {
+      const username = document.getElementById(`username-${index}`).value;
+      const rating = document.getElementById(`rating-${index}`).value;
+      const review = document.getElementById(`review-${index}`).value;
+      const productName = products[index].title;
+
+      if (!username || (!rating && !review)) {
+        alert("Please enter your name and at least a rating or review.");
+        return;
+      }
+
+      fetch('http://localhost:5000/api/reviews/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productName, username, rating, review })
+      })
+      .then(res => {
+        if (res.status === 409) {
+          alert("You already submitted a review for this product.");
+        } else if (res.ok) {
+          alert(" Review submitted successfully!");
+          loadReviews(productName, index);
+        } else {
+          alert("Something went wrong while submitting.");
+        }
+      })
+      .catch(err => {
+        alert(" Failed to submit review.");
+        console.error("Error:", err);
+      });
+    }
+
+    function loadReviews(productName, index) {
+      fetch(`http://localhost:5000/api/reviews/${encodeURIComponent(productName)}`)
+        .then(res => res.json())
+        .then(data => {
+          const reviewsDiv = document.getElementById(`reviews-${index}`);
+          if (data.length === 0) {
+            reviewsDiv.innerHTML = `<div class="review">No reviews yet.</div>`;
+          } else {
+            reviewsDiv.innerHTML = data.map(r => {
+              const stars = '⭐'.repeat(r.rating || 0);
+              return `<div class="review"><b>${r.username}</b>: ${r.review_text || ''} <span style="float:right">${stars}</span></div>`;
+            }).join('');
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load reviews:", err);
+        });
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
